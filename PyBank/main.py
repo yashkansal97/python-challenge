@@ -7,37 +7,43 @@ with open(budget) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=",")
 
     csv_header = next(csv_file)
-    print(f"Header: {csv_header}")
 
-    total = 0
     change = 0
     date = []
     difference = []
     profit_loss = []
 
     for row in csv_reader:
-        total = total + int(row[1])
         date.append(row[0])
-        profit_loss.append(row[1])
+        profit_loss.append(int(row[1]))
+
+    total_months = len(date)
+    total_pl = sum(profit_loss)
 
     for i in range(len(date)):
         if i != 0:
             change = int(profit_loss[i]) - int(profit_loss[i-1])
             difference.append(change)
 
-    print(range(len(date)+1))
-    print(difference[0])
-    print(min(difference))
-    #print(sum(difference))
-    print(sum(difference)/len(difference))
+    avg_change = sum(difference)/len(difference)
+    greatest_increase = max(difference)
+    g_inc_index = difference.index(greatest_increase) + 1
+    greatest_decrease = min(difference)
+    g_dec_index = difference.index(greatest_decrease) + 1
 
+    print("Financial Analysis\n-------------------------")
+    print(f"Total Months: {total_months}")
+    print(f"Total: ${total_pl}")
+    print("Average Change: $" + '%.2f' % avg_change)
+    print(f"Greatest Increase in Profits: {date[g_inc_index]} (${greatest_increase})")
+    print(f"Greatest Decrease in Profits: {date[g_dec_index]} (${greatest_decrease})")
 
-
-    #date = []
-
-    #for col in csv_reader:
-    #    date.append(col[0])
-
-    #print(type(csv_reader))
+with open("Analysis/budget_analysis.txt", "w") as f:
+    print("Financial Analysis\n-------------------------", file = f)
+    print(f"Total Months: {total_months}", file = f)
+    print(f"Total: ${total_pl}", file = f)
+    print("Average Change: $" + '%.2f' % avg_change, file = f)
+    print(f"Greatest Increase in Profits: {date[g_inc_index]} (${greatest_increase})", file = f)
+    print(f"Greatest Decrease in Profits: {date[g_dec_index]} (${greatest_decrease})", file = f)
 
     
